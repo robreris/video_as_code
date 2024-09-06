@@ -1,20 +1,41 @@
-name: CI
+---
+name: MLT Render Workflow
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main  # Triggers the workflow when pushing to the main branch
+  workflow_dispatch:  # Allows manual trigger from the GitHub Actions UI
 
 jobs:
-  build:
+  render:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v3  # This checks out your repository
 
-    - name: Set up FFmpeg
-      run: sudo apt-get install ffmpeg
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y melt ffmpeg xvfb
 
-    - name: Run concatenate script
-      run: bash scripts/concatenate_videos.sh
+      - name: Run MLT Rendering
+        run: |
+          xvfb-run -a melt assets/mlt/updated_video_as_code.mlt \
+          -consumer avformat:outputs/final_video.mp4 \
+          acodec=aac vcodec=libx264 crf=23 preset=slow fflags=+genpts
 
-    - name: Run add text overlay script
-      run: bash scripts/add_text_overlay.sh
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit PDF to the repository
+        run: |
+          git fetch origin main
+          git add .
+          git commit -m "Add/update mp4"
+          git push origin main
+        env:
+          GH_TOKEN: ${{ github.token }}
