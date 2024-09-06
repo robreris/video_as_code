@@ -3,8 +3,9 @@ name: MLT Render Workflow
 
 on:
   push:
-    branches:
-      - main  # Triggers the workflow when pushing to the main branch
+    paths:
+      - 'assets/**'  # Trigger workflow on any changes in the assets folder
+      - '.github/workflows/ci.yml'  # Trigger workflow when the ci.yml file changes
   workflow_dispatch:  # Allows manual trigger from the GitHub Actions UI
 
 jobs:
@@ -18,7 +19,17 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y melt ffmpeg xvfb
+          sudo apt-get install -y melt ffmpeg xvfb python3
+
+      - name: Run doit.py to update MLT file
+        run: |
+          python3 scripts/doit.py  # Assuming doit.py is located in the scripts folder
+
+      - name: Check if MLT file was generated
+        run: ls -l assets/mlt/updated_video_as_code.mlt
+
+      - name: Set LADSPA_PATH
+        run: export LADSPA_PATH=""
 
       - name: Run MLT Rendering
         run: |
@@ -31,11 +42,11 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Commit PDF to the repository
+      - name: Commit MP4 to the repository
         run: |
           git fetch origin main
-          git add .
-          git commit -m "Add/update mp4"
+          git add outputs/final_video.mp4  # Only add the final MP4 file
+          git commit -m "Add/update mp4: $(date +'%Y-%m-%d %H:%M:%S')"
           git push origin main
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
