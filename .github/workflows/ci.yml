@@ -23,7 +23,7 @@ jobs:
 
       - name: Run doit.py to update MLT file
         run: |
-          python3 scripts/doit.py  # Assuming doit.py is located in the scripts folder
+          python scripts/doit.py
 
       - name: Check if MLT file was generated
         run: ls -l assets/mlt/updated_video_as_code.mlt
