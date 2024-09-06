@@ -1,0 +1,15 @@
+# Ignore audio and video files
+/assets/audio/*
+/assets/video/*
+
+# Ignore text files
+/assets/text/*
+
+# Ignore script files
+/scripts/*
+
+# Ignore node_modules if using Node.js
+node_modules/
+
+# Ignore Python virtual environment
+venv/

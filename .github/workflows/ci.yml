@@ -1,0 +1,20 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up FFmpeg
+      run: sudo apt-get install ffmpeg
+
+    - name: Run concatenate script
+      run: bash scripts/concatenate_videos.sh
+
+    - name: Run add text overlay script
+      run: bash scripts/add_text_overlay.sh
