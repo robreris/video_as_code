@@ -2,7 +2,6 @@
 /assets/audio/*
 /assets/video/*
 /assets/images/*
-/assets/mlt/*
 
 # Ignore node_modules if using Node.js
 node_modules/
