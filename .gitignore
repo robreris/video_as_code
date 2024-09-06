@@ -1,9 +1,8 @@
 # Ignore audio and video files
 /assets/audio/*
 /assets/video/*
-
-# Ignore text files
-/assets/text/*
+/assets/images/*
+/assets/mlt/*
 
 # Ignore script files
 /scripts/*
