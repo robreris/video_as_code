@@ -29,12 +29,12 @@ for i in "${!images[@]}"; do
     audio="${audios[$i]}"
     output="outputs/segment${counter}.mp4"
 
-    # Get the duration of the audio file
-    duration=$(ffmpeg -i "$audio" 2>&1 | grep "Duration" | awk '{print $2}' | tr -d ,)
+    # Get the duration of the audio file (in seconds)
+    duration=$(ffmpeg -i "$audio" 2>&1 | grep "Duration" | awk '{print $2}' | tr -d , | awk -F: '{ print ($1 * 3600) + ($2 * 60) + $3 }')
 
-    # Create a video from the image and audio
+    # Create a video from the image and audio, explicitly setting the duration to match the audio
     ffmpeg -loop 1 -i "$image" -i "$audio" -c:v libx264 -c:a aac -strict experimental \
-        -b:a 192k -pix_fmt yuv420p -shortest -t "$duration" "$output"
+        -t "$duration" -pix_fmt yuv420p "$output"
 
     counter=$((counter + 1))
 done
