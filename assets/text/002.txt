@@ -1,1 +1,1 @@
-Subtitle for Slide2
+First things first! In our tutorial, we'll be forking the repository hosting our Terraform code!

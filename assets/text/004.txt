@@ -1,0 +1,1 @@
+As a part of this build a Terraform resource compiles our draw-io document. To access it in PNG, simply push your new drawio diagram to github, a github action will take care of the rest!
