@@ -54,7 +54,7 @@ echo "file '$(pwd)/outputs/outro_with_audio.mp4'" >> outputs/files.txt  # Add ou
 ffmpeg -f concat -safe 0 -i outputs/files.txt -fflags +genpts -c copy outputs/final_video.mp4
 
 # Clean up individual segments
-rm outputs/segment*.mp4
-rm outputs/files.txt
-rm outputs/intro_with_audio.mp4
-rm outputs/outro_with_audio.mp4
+#rm outputs/segment*.mp4
+#rm outputs/files.txt
+#rm outputs/intro_with_audio.mp4
+#rm outputs/outro_with_audio.mp4
