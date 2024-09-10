@@ -226,7 +226,7 @@
   <chain id="chain5" out="00:00:14.958">
     <property name="length">00:00:15.000</property>
     <property name="eof">pause</property>
-    <property name="resource">assets/bumpers/bumper.wav</property>
+    <property name="resource">assets/bumpers/bumper.mp3</property>
     <property name="mlt_service">avformat-novalidate</property>
     <property name="meta.media.nb_streams">1</property>
     <property name="meta.media.0.stream.type">audio</property>
@@ -265,7 +265,7 @@
   <chain id="chain9" out="00:00:14.958">
     <property name="length">00:00:15.000</property>
     <property name="eof">pause</property>
-    <property name="resource">assets/bumpers/bumper.wav</property>
+    <property name="resource">assets/bumpers/bumper.mp3</property>
     <property name="mlt_service">avformat-novalidate</property>
     <property name="meta.media.nb_streams">1</property>
     <property name="meta.media.0.stream.type">audio</property>
