@@ -1,6 +1,8 @@
 <?xml version="1.0" ?>
 <mlt LC_NUMERIC="C" version="7.27.0">
   <profile description="automatic" width="1920" height="1080" progressive="1" sample_aspect_num="1" sample_aspect_den="1" display_aspect_num="16" display_aspect_den="9" frame_rate_num="24" frame_rate_den="1" colorspace="709"/>
+
+  <!-- Bumper video at the start -->
   <chain id="chain_bumper" out="00:00:06.458">
     <property name="length">00:00:06.500</property>
     <property name="eof">pause</property>
@@ -8,26 +10,37 @@
     <property name="mlt_service">avformat</property>
     <property name="meta.media.nb_streams">2</property>
   </chain>
-  <chain id="chain_music" out="00:00:10.000">
-    <property name="length">00:00:10.000</property>
+
+  <!-- Audio overlay -->
+  <chain id="chain_audio" out="00:00:13.333">
+    <property name="length">00:00:13.333</property>
     <property name="eof">pause</property>
-    <property name="resource">assets/bumpers/bumper.mp3</property>
+    <property name="resource">assets/audio/001.mp3</property>
     <property name="mlt_service">avformat</property>
     <property name="meta.media.nb_streams">1</property>
-    <filter id="fadeout">
-      <property name="mlt_service">volume</property>
-      <property name="shotcut:filter">fadeOutVolume</property>
-      <property name="level">00:00:07.000=0;00:00:10.000=-60</property>
-      <property name="fadeOut">1</property>
-    </filter>
   </chain>
+
+  <!-- Image overlay -->
+  <chain id="chain_image" out="00:00:13.333">
+    <property name="length">00:00:13.333</property>
+    <property name="eof">pause</property>
+    <property name="resource">assets/images/001.png</property>
+    <property name="mlt_service">qimage</property>
+  </chain>
+
+  <!-- Video playlist -->
   <playlist id="playlist_video">
     <entry producer="chain_bumper" in="00:00:00.000" out="00:00:06.458"/>
+    <entry producer="chain_image" in="00:00:06.458" out="00:00:13.333"/>
   </playlist>
+
+  <!-- Audio playlist -->
   <playlist id="playlist_audio">
-    <entry producer="chain_music" in="00:00:00.000" out="00:00:10.000"/>
+    <entry producer="chain_audio" in="00:00:06.458" out="00:00:13.333"/>
   </playlist>
-  <tractor id="tractor0" title="Bumper + Music">
+
+  <!-- Tractor to combine the video and audio -->
+  <tractor id="tractor0" title="Video with Audio Overlay">
     <track producer="playlist_video"/>
     <track producer="playlist_audio" hide="video"/>
     <transition id="transition0">
