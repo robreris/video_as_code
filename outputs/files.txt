@@ -1,6 +1,0 @@
-file '/workspaces/video_as_code/outputs/intro_with_audio.mp4'
-file '/workspaces/video_as_code/outputs/segment1.mp4'
-file '/workspaces/video_as_code/outputs/segment2.mp4'
-file '/workspaces/video_as_code/outputs/segment3.mp4'
-file '/workspaces/video_as_code/outputs/segment4.mp4'
-file '/workspaces/video_as_code/outputs/outro_with_audio.mp4'
