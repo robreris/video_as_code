@@ -6,7 +6,7 @@ mkdir -p outputs
 # Define your intro/outro video and audio files
 intro_video="assets/bumpers/bumper.mp4"
 outro_video="assets/bumpers/bumper.mp4"
-bumper_audio="assets/bumpers/bumper.wav"
+bumper_audio="assets/bumpers/bumper.mp3"
 
 # Define the input images and audio files
 images=(assets/images/*.png)
