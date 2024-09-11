@@ -27,8 +27,10 @@ jobs:
         git init
         git remote add origin https://github.com/ajlab-gh/devops_content_creation_marp.git
         git config core.sparseCheckout true
-        echo "outputs/images/*" >> .git/info/sparse-checkout
+        echo "outputs/images/*.png" >> .git/info/sparse-checkout  # Only target PNG files
         git pull origin main
+        mv outputs/images/* .  # Move the images to the correct directory
+        rm -rf outputs  # Remove the outputs directory to avoid clutter
 
     # Step 3: Pull only "audio" from the TTS repository and place it in assets/audio
     - name: Pull audio from TTS repo
