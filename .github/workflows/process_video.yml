@@ -46,6 +46,8 @@ jobs:
         echo "audio/*.mp3" >> .git/info/sparse-checkout  # Only target MP3 files
         git pull origin main
         git sparse-checkout reapply  # Reapply sparse checkout to ensure files are updated
+        mv audio/* .  # Move audio files to the correct directory (assets/audio)
+        rm -rf audio  # Remove the nested "audio" directory
 
     # Step 4: Debug: Check if the files are correctly fetched and merged
     - name: List images and audio files
