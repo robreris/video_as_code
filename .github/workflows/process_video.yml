@@ -19,28 +19,27 @@ jobs:
       with:
         fetch-depth: 1
 
-    # Step 2: Pull images from the MARP repository and merge them into assets/images
+    # Step 2: Pull only "outputs/images" from the MARP repository and place it in assets/images
     - name: Pull images from MARP repo
-      uses: actions/checkout@v3
-      with:
-        repository: ajlab-gh/devops_content_creation_marp
-        path: assets/images
-        sparse-checkout: true
-        fetch-depth: 1
-
-    - name: Set sparse checkout path for MARP images
       run: |
-        git sparse-checkout set outputs/images
-      working-directory: assets/images
+        mkdir -p assets/images  # Create the directory if it doesn't exist
+        cd assets/images
+        git init
+        git remote add origin https://github.com/ajlab-gh/devops_content_creation_marp.git
+        git config core.sparseCheckout true
+        echo "outputs/images/*" >> .git/info/sparse-checkout
+        git pull origin main
 
-    # Step 3: Pull audio files from the TTS repository and merge them into assets/audio
+    # Step 3: Pull only "audio" from the TTS repository and place it in assets/audio
     - name: Pull audio from TTS repo
-      uses: actions/checkout@v3
-      with:
-        repository: ajlab-gh/devops_content_creation_tts
-        path: assets/audio
-        sparse-checkout: true
-        fetch-depth: 1
+      run: |
+        mkdir -p assets/audio  # Create the directory if it doesn't exist
+        cd assets/audio
+        git init
+        git remote add origin https://github.com/ajlab-gh/devops_content_creation_tts.git
+        git config core.sparseCheckout true
+        echo "audio/*" >> .git/info/sparse-checkout
+        git pull origin main
 
     - name: Set sparse checkout path for TTS audio
       run: |
