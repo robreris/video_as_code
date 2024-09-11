@@ -19,14 +19,10 @@ jobs:
       with:
         fetch-depth: 1
 
-    # Step 2: Clear the outputs/images directory if it exists
-    - name: Clear outputs/images if it exists
-      run: |
-         rm -rf assets/images/outputs  # Remove the outputs directory if it exists
-
     # Step 2: Pull only "outputs/images" from the MARP repository and place it in assets/images
     - name: Pull images from MARP repo
       run: |
+        rm -rf assets/images/outputs  # Remove the outputs directory if it exists
         mkdir -p assets/images  # Create the directory if it doesn't exist
         cd assets/images
         git init
@@ -34,25 +30,22 @@ jobs:
         git config core.sparseCheckout true
         echo "outputs/images/*.png" >> .git/info/sparse-checkout  # Only target PNG files
         git pull origin main
-        git sparse-checkout reapply  # Reapply sparse checkout if there are warnings
+        git sparse-checkout reapply  # Reapply sparse checkout to ensure files are updated
         mv outputs/images/* .  # Move the images to the correct directory
         rm -rf outputs  # Remove the outputs directory to avoid clutter
 
     # Step 3: Pull only "audio" from the TTS repository and place it in assets/audio
     - name: Pull audio from TTS repo
       run: |
+        rm -rf assets/audio/audio  # Remove the old audio directory if it exists
         mkdir -p assets/audio  # Create the directory if it doesn't exist
         cd assets/audio
         git init
         git remote add origin https://github.com/ajlab-gh/devops_content_creation_tts.git
         git config core.sparseCheckout true
-        echo "audio/*" >> .git/info/sparse-checkout
+        echo "audio/*.mp3" >> .git/info/sparse-checkout  # Only target MP3 files
         git pull origin main
-
-    - name: Set sparse checkout path for TTS audio
-      run: |
-        git sparse-checkout set audio
-      working-directory: assets/audio
+        git sparse-checkout reapply  # Reapply sparse checkout to ensure files are updated
 
     # Step 4: Debug: Check if the files are correctly fetched and merged
     - name: List images and audio files
