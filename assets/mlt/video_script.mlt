@@ -1,0 +1,63 @@
+<mlt>
+  <profile description="HD 1080p 30fps" frame_rate_num="30" frame_rate_den="1" width="1920" height="1080" sample_aspect_num="1" sample_aspect_den="1" display_aspect_num="16" display_aspect_den="9" progressive="1"/>
+
+  <producer id="producer_image_0" in="0" out="177">
+    <property name="resource">assets/images/001.png</property>
+    <property name="mlt_service">qimage</property>
+  </producer>
+
+  <producer id="producer_audio_0" in="0" out="177">
+    <property name="resource">assets/audio/001.mp3</property>
+    <property name="mlt_service">avformat</property>
+  </producer>
+
+  <tractor id="tractor_0" in="0" out="177">
+    <track producer="producer_image_0" />
+    <track producer="producer_audio_0" />
+  </tractor>
+
+  <producer id="producer_image_1" in="177" out="380">
+    <property name="resource">assets/images/002.png</property>
+    <property name="mlt_service">qimage</property>
+  </producer>
+
+  <producer id="producer_audio_1" in="177" out="380">
+    <property name="resource">assets/audio/002.mp3</property>
+    <property name="mlt_service">avformat</property>
+  </producer>
+
+  <tractor id="tractor_1" in="177" out="380">
+    <track producer="producer_image_1" />
+    <track producer="producer_audio_1" />
+  </tractor>
+
+  <producer id="producer_image_2" in="380" out="559">
+    <property name="resource">assets/images/003.png</property>
+    <property name="mlt_service">qimage</property>
+  </producer>
+
+  <producer id="producer_audio_2" in="380" out="559">
+    <property name="resource">assets/audio/003.mp3</property>
+    <property name="mlt_service">avformat</property>
+  </producer>
+
+  <tractor id="tractor_2" in="380" out="559">
+    <track producer="producer_image_2" />
+    <track producer="producer_audio_2" />
+  </tractor>
+
+  <producer id="producer_image_3" in="559" out="913">
+    <property name="resource">assets/images/004.png</property>
+    <property name="mlt_service">qimage</property>
+  </producer>
+
+  <producer id="producer_audio_3" in="559" out="913">
+    <property name="resource">assets/audio/004.mp3</property>
+    <property name="mlt_service">avformat</property>
+  </producer>
+
+  <tractor id="tractor_3" in="559" out="913">
+    <track producer="producer_image_3" />
+    <track producer="producer_audio_3" />
+  </tractor>
+</mlt>
