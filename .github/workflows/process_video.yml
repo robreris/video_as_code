@@ -80,7 +80,7 @@ jobs:
 
     - name: Commit PDF to the repository
       run: |
-        git add assets/outputs/*.mp4
+        git add .
         git commit -m "Auto-generated video from new content"
         git push
       env:
