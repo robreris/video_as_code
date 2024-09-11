@@ -69,7 +69,7 @@ jobs:
     # Step 7: Run the video processing script
     - name: Run video processing script
       run: |
-        python scripts/create_video1.py
+        python scripts/create_video.py
 
 
     # Optional: Push the newly created video back to the repository
