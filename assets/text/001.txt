@@ -1,1 +1,0 @@
-Hi and welcome to this short video on how devops practices can be implemented for content creation!
