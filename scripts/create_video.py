@@ -44,11 +44,10 @@ for idx, (image, audio) in enumerate(zip(images, audios)):
 
     # ffmpeg command to generate video for each image/audio pair
     ffmpeg_command = [
-        'ffmpeg', '-y', '-framerate', '1', '-i', image_path,  # No loop, just show image
+        'ffmpeg', '-y', '-i', image_path,  # No loop, just show image once
         '-i', audio_path,  # Audio plays only once
         '-c:v', 'libx264', '-tune', 'stillimage', '-c:a', 'aac', '-b:a', '192k',
-        '-pix_fmt', 'yuv420p', '-t', str(audio_duration),  # Ensure the video length matches the audio duration
-        output_video
+        '-pix_fmt', 'yuv420p', '-shortest', output_video  # Use -shortest to match video length to audio length
     ]
 
     print(f"Creating video: {output_video}")
@@ -82,6 +81,6 @@ if os.path.exists(final_output):
         shutil.rmtree(output_dir)
         print(f"Deleted the directory: {output_dir}")
     except Exception as e:
-        print(f"Error deleting {output_dir}: {e}")  # Corrected the f-string here
+        print(f"Error deleting {output_dir}: {e}")
 else:
     print(f"Failed to create {final_output}, skipping deletion of {output_dir}.")
