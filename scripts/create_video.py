@@ -47,11 +47,12 @@ for idx, (image, audio) in enumerate(zip(images, audios)):
         'ffmpeg', '-y', '-i', image_path,  # No loop, just show image once
         '-i', audio_path,  # Audio plays only once
         '-c:v', 'libx264', '-tune', 'stillimage', '-c:a', 'aac', '-b:a', '192k',
-        '-pix_fmt', 'yuv420p', '-shortest', output_video  # Use -shortest to match video length to audio length
+        '-pix_fmt', 'yuv420p', '-t', str(audio_duration),  # Set video duration explicitly to audio duration
+        output_video
     ]
 
     print(f"Creating video: {output_video}")
-    subprocess.run(ffmpeg_command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+    subprocess.run(ffmpeg_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 # Create file list for concatenation
 filelist_path = os.path.join(output_dir, 'filelist.txt')
