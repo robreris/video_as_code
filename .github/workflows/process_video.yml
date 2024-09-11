@@ -1,0 +1,81 @@
+name: Rebuild Video on File Changes
+
+on:
+  push:
+    paths:
+      - '**/*.png'
+      - '**/*.mp3'
+      - '**/*.pdf'
+  workflow_dispatch:
+
+jobs:
+  build-video:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 1
+
+
+    # Pull only the "outputs/images" directory from ajlab-gh/devops_content_creation_marp
+    - name: Pull images from MARP repo
+      uses: actions/checkout@v3
+      with:
+        repository: ajlab-gh/devops_content_creation_marp
+        path: assets/images
+        sparse-checkout: true  # Enables sparse checkout
+        fetch-depth: 1
+
+    - name: Set sparse checkout path for MARP images
+      run: |
+        git sparse-checkout set outputs/images
+      working-directory: assets/images
+
+    # Pull everything from "audio" directory in ajlab-gh/devops_content_creation_tts
+    - name: Pull audio from TTS repo
+      uses: actions/checkout@v3
+      with:
+        repository: ajlab-gh/devops_content_creation_tts
+        path: assets/audio
+        sparse-checkout: true  # Enables sparse checkout
+        fetch-depth: 1
+
+    - name: Set sparse checkout path for TTS audio
+      run: |
+        git sparse-checkout set audio
+      working-directory: assets/audio
+
+    # Run your video processing script
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'  # Use your desired Python version
+
+    - name: Install ffmpeg
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y ffmpeg
+
+    - name: Run video processing script
+      run: |
+        python scripts/create_video.py
+
+    # Optionally, upload the newly created video as an artifact or commit it back to the repo
+    - name: Upload final video as an artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: final-output-video
+        path: assets/outputs/*.mp4
+
+    # Optional: Push the newly created video back to the repository
+    - name: Commit and push final video
+      run: |
+        git config --global user.email "you@example.com"
+        git config --global user.name "Your Name"
+        git add assets/outputs/*.mp4
+        git commit -m "Auto-generated video from new content"
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
