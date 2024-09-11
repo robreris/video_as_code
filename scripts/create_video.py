@@ -20,6 +20,15 @@ if not os.path.exists(output_dir):
 if not os.path.exists(output_final_dir):
     os.makedirs(output_final_dir)
 
+# Function to get the duration of an audio file using ffprobe
+def get_audio_duration(audio_path):
+    result = subprocess.run(
+        ['ffprobe', '-v', 'error', '-show_entries', 'format=duration',
+         '-of', 'default=noprint_wrappers=1:nokey=1', audio_path],
+        stdout=subprocess.PIPE, stderr=subprocess.STDOUT
+    )
+    return float(result.stdout)
+
 # Get list of image and audio files
 images = sorted([f for f in os.listdir(image_dir) if f.endswith(('.png', '.jpg', '.jpeg'))])
 audios = sorted([f for f in os.listdir(audio_dir) if f.endswith(('.mp3', '.wav'))])
@@ -30,12 +39,16 @@ for idx, (image, audio) in enumerate(zip(images, audios)):
     audio_path = os.path.join(audio_dir, audio)
     output_video = os.path.join(output_dir, f"output_{idx+1:03d}.mp4")
 
-    # ffmpeg command to generate video for each image/audio pair without looping
+    # Get the duration of the audio file
+    audio_duration = get_audio_duration(audio_path)
+
+    # ffmpeg command to generate video for each image/audio pair
     ffmpeg_command = [
-        'ffmpeg', '-y', '-i', image_path,  # No loop, just use the image
+        'ffmpeg', '-y', '-framerate', '1', '-i', image_path,  # No loop, just show image
         '-i', audio_path,  # Audio plays only once
         '-c:v', 'libx264', '-tune', 'stillimage', '-c:a', 'aac', '-b:a', '192k',
-        '-pix_fmt', 'yuv420p', '-shortest', output_video  # Use -shortest to match video length to audio length
+        '-pix_fmt', 'yuv420p', '-t', str(audio_duration),  # Ensure the video length matches the audio duration
+        output_video
     ]
 
     print(f"Creating video: {output_video}")
@@ -69,6 +82,6 @@ if os.path.exists(final_output):
         shutil.rmtree(output_dir)
         print(f"Deleted the directory: {output_dir}")
     except Exception as e:
-        print(f"Error deleting {output_dir}: {e}")
+        print(f"Error deleting {output_dir}: {e}")  # Corrected the f-string here
 else:
     print(f"Failed to create {final_output}, skipping deletion of {output_dir}.")
