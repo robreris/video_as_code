@@ -28,9 +28,10 @@ for idx, (image, audio) in enumerate(zip(images, audios)):
 
     # ffmpeg command to generate video for each image/audio pair
     ffmpeg_command = [
-        'ffmpeg', '-loop', '1', '-i', image_path, '-i', audio_path,
+        'ffmpeg', '-y', '-loop', '1', '-i', image_path,  # Loop the image
+        '-i', audio_path,  # Audio plays only once
         '-c:v', 'libx264', '-tune', 'stillimage', '-c:a', 'aac', '-b:a', '192k',
-        '-pix_fmt', 'yuv420p', '-shortest', output_video
+        '-pix_fmt', 'yuv420p', '-shortest', output_video  # Use -shortest to match video length to audio length
     ]
 
     print(f"Creating video: {output_video}")
@@ -43,9 +44,9 @@ with open(filelist_path, 'w') as f:
         video_file = f"output_{idx+1:03d}.mp4"  # Only the filename is needed
         f.write(f"file '{video_file}'\n")  # Ensure the correct format is used
 
-# ffmpeg command to concatenate the videos
+# ffmpeg command to concatenate the videos with the overwrite flag (-y)
 concat_command = [
-    'ffmpeg', '-f', 'concat', '-safe', '0', '-i', filelist_path, '-c', 'copy', final_output
+    'ffmpeg', '-y', '-f', 'concat', '-safe', '0', '-i', filelist_path, '-c', 'copy', final_output
 ]
 
 print(f"Concatenating videos into: {final_output}")
