@@ -19,6 +19,11 @@ jobs:
       with:
         fetch-depth: 1
 
+    # Step 2: Clear the outputs/images directory if it exists
+    - name: Clear outputs/images if it exists
+      run: |
+         rm -rf assets/images/outputs  # Remove the outputs directory if it exists
+
     # Step 2: Pull only "outputs/images" from the MARP repository and place it in assets/images
     - name: Pull images from MARP repo
       run: |
@@ -29,6 +34,7 @@ jobs:
         git config core.sparseCheckout true
         echo "outputs/images/*.png" >> .git/info/sparse-checkout  # Only target PNG files
         git pull origin main
+        git sparse-checkout reapply  # Reapply sparse checkout if there are warnings
         mv outputs/images/* .  # Move the images to the correct directory
         rm -rf outputs  # Remove the outputs directory to avoid clutter
 

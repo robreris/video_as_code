@@ -7,7 +7,7 @@ from datetime import datetime
 image_dir = "assets/images"
 audio_dir = "assets/audio"
 output_dir = "assets/temp"
-output_final_dir = "assets/outputs"
+output_final_dir = "outputs"
 bumper_path = os.path.abspath("assets/bumpers/bumper.mp4")  # Absolute path to bumper video
 
 final_output = os.path.join(output_final_dir, f"final_output.mp4")
