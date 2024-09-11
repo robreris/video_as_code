@@ -60,7 +60,7 @@ jobs:
 
     - name: Run video processing script
       run: |
-        python scripts/create_video.py
+        python scripts/create_video1.py
 
     # Optionally, upload the newly created video as an artifact or commit it back to the repo
     - name: Upload final video as an artifact
