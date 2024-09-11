@@ -1,13 +1,17 @@
 import os
 import subprocess
 import shutil
+from datetime import datetime
 
 # Define directories
 image_dir = "assets/images"
 audio_dir = "assets/audio"
 output_dir = "assets/temp"
 output_final_dir = "assets/outputs"
-final_output = os.path.join(output_final_dir, "final_output.mp4")
+
+# Add a timestamp to ensure uniqueness of the final output filename
+timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+final_output = os.path.join(output_final_dir, f"final_output_{timestamp}.mp4")
 
 # Create output and temp directories if they don't exist
 if not os.path.exists(output_dir):
@@ -26,9 +30,9 @@ for idx, (image, audio) in enumerate(zip(images, audios)):
     audio_path = os.path.join(audio_dir, audio)
     output_video = os.path.join(output_dir, f"output_{idx+1:03d}.mp4")
 
-    # ffmpeg command to generate video for each image/audio pair
+    # ffmpeg command to generate video for each image/audio pair without looping
     ffmpeg_command = [
-        'ffmpeg', '-y', '-loop', '1', '-i', image_path,  # Loop the image
+        'ffmpeg', '-y', '-i', image_path,  # No loop, just use the image
         '-i', audio_path,  # Audio plays only once
         '-c:v', 'libx264', '-tune', 'stillimage', '-c:a', 'aac', '-b:a', '192k',
         '-pix_fmt', 'yuv420p', '-shortest', output_video  # Use -shortest to match video length to audio length
