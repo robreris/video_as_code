@@ -70,12 +70,16 @@ jobs:
         path: assets/outputs/*.mp4
 
     # Optional: Push the newly created video back to the repository
-    - name: Commit and push final video
+    - name: Configure Git
       run: |
-        git config --global user.email "you@example.com"
-        git config --global user.name "Your Name"
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+    - name: Commit PDF to the repository
+      run: |
         git add assets/outputs/*.mp4
         git commit -m "Auto-generated video from new content"
         git push
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_TOKEN: ${{ github.token }}
+
