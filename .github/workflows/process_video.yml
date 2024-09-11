@@ -48,7 +48,7 @@ jobs:
       working-directory: assets/audio
 
     # Step 4: Debug: Check if the files are correctly fetched and merged
-    - name: Debug: List images and audio files
+    - name: List images and audio files
       run: |
         echo "Listing images:"
         ls -la assets/images
