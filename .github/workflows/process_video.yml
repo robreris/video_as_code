@@ -37,7 +37,7 @@ jobs:
     # Step 3: Pull only "audio" from the TTS repository and place it in assets/audio
     - name: Pull audio from TTS repo
       run: |
-        rm -rf assets/audio/audio  # Remove the old audio directory if it exists
+        rm -rf assets/audio  # Remove the old audio directory if it exists
         mkdir -p assets/audio  # Create the directory if it doesn't exist
         cd assets/audio
         git init
