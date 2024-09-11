@@ -1,0 +1,6 @@
+file '/home/runner/work/video_as_code/video_as_code/assets/bumpers/bumper.mp4'
+file '/home/runner/work/video_as_code/video_as_code/assets/temp/output_001.mp4'
+file '/home/runner/work/video_as_code/video_as_code/assets/temp/output_002.mp4'
+file '/home/runner/work/video_as_code/video_as_code/assets/temp/output_003.mp4'
+file '/home/runner/work/video_as_code/video_as_code/assets/temp/output_004.mp4'
+file '/home/runner/work/video_as_code/video_as_code/assets/bumpers/bumper.mp4'
