@@ -13,19 +13,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
+    # Step 1: Checkout your own repository first (without deleting anything)
+    - name: Checkout current repository
       uses: actions/checkout@v3
       with:
         fetch-depth: 1
 
-
-    # Pull only the "outputs/images" directory from ajlab-gh/devops_content_creation_marp
+    # Step 2: Pull images from the MARP repository and merge them into assets/images
     - name: Pull images from MARP repo
       uses: actions/checkout@v3
       with:
         repository: ajlab-gh/devops_content_creation_marp
         path: assets/images
-        sparse-checkout: true  # Enables sparse checkout
+        sparse-checkout: true
         fetch-depth: 1
 
     - name: Set sparse checkout path for MARP images
@@ -33,13 +33,13 @@ jobs:
         git sparse-checkout set outputs/images
       working-directory: assets/images
 
-    # Pull everything from "audio" directory in ajlab-gh/devops_content_creation_tts
+    # Step 3: Pull audio files from the TTS repository and merge them into assets/audio
     - name: Pull audio from TTS repo
       uses: actions/checkout@v3
       with:
         repository: ajlab-gh/devops_content_creation_tts
         path: assets/audio
-        sparse-checkout: true  # Enables sparse checkout
+        sparse-checkout: true
         fetch-depth: 1
 
     - name: Set sparse checkout path for TTS audio
@@ -47,27 +47,31 @@ jobs:
         git sparse-checkout set audio
       working-directory: assets/audio
 
-    # Run your video processing script
+    # Step 4: Debug: Check if the files are correctly fetched and merged
+    - name: Debug: List images and audio files
+      run: |
+        echo "Listing images:"
+        ls -la assets/images
+        echo "Listing audio:"
+        ls -la assets/audio
+
+    # Step 5: Set up Python
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.x'  # Use your desired Python version
+        python-version: '3.x'
 
+    # Step 6: Install ffmpeg
     - name: Install ffmpeg
       run: |
         sudo apt-get update
         sudo apt-get install -y ffmpeg
 
+    # Step 7: Run the video processing script
     - name: Run video processing script
       run: |
         python scripts/create_video1.py
 
-    # Optionally, upload the newly created video as an artifact or commit it back to the repo
-    - name: Upload final video as an artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: final-output-video
-        path: assets/outputs/*.mp4
 
     # Optional: Push the newly created video back to the repository
     - name: Configure Git
