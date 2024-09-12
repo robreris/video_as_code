@@ -7,7 +7,8 @@ image_dir = "assets/images"
 audio_dir = "assets/audio"
 output_dir = "assets/temp"
 output_final_dir = "outputs"
-bumper_path = os.path.abspath("assets/bumpers/bumper.mp4")  # Absolute path to bumper video
+bumper_path_in = os.path.abspath("assets/bumpers/bumper_in.mp4")  # Absolute path to bumper video
+bumper_path_out = os.path.abspath("assets/bumpers/bumper_out.mp4")  # Absolute path to bumper video
 
 final_output = os.path.join(output_final_dir, f"final_output.mp4")
 
@@ -92,9 +93,9 @@ for idx, (image, audio) in enumerate(zip(images, audios)):
 filelist_path = os.path.join(output_dir, 'filelist.txt')
 with open(filelist_path, 'w') as f:
     # Check if bumper exists and write it at the beginning
-    if os.path.exists(bumper_path):
-        print(f"Bumper found at {bumper_path}, adding to the beginning and end.")
-        f.write(f"file '{bumper_path}'\n")  # Include the bumper at the beginning
+    if os.path.exists(bumper_path_in):
+        print(f"Bumper found at {bumper_path_in}, adding to the beginning and end.")
+        f.write(f"file '{bumper_path_in}'\n")  # Include the bumper at the beginning
     
     # Add the generated videos
     for idx in range(len(images)):
@@ -106,10 +107,10 @@ with open(filelist_path, 'w') as f:
             print(f"Warning: {video_file_path} not found, skipping.")
 
     # Add bumper.mp4 at the end
-    if os.path.exists(bumper_path):
-        f.write(f"file '{bumper_path}'\n")
+    if os.path.exists(bumper_path_out):
+        f.write(f"file '{bumper_path_out}'\n")
     else:
-        print(f"Bumper not found at {bumper_path}, skipping.")
+        print(f"Bumper not found at {bumper_path_out}, skipping.")
 
 # Print the filelist.txt content for debugging
 print("\n--- filelist.txt content ---")
