@@ -1,0 +1,99 @@
+---
+name: Auto and Manual Video Creation with Remote Repos
+
+on:
+  # Automatically trigger on push to the main branch of this repo
+  push:
+    paths:
+      - '**/*.png'
+      - '**/*.mp3'
+      - '**/*.pdf'
+
+  # Manual trigger via the GitHub Actions UI
+  workflow_dispatch:
+
+  # Trigger from remote repository dispatch event
+  repository_dispatch:
+    types: [update-video]
+
+jobs:
+  build-video:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Checkout your own repository first (without deleting anything)
+    - name: Checkout current repository
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 1
+
+    # Step 2: Pull only "outputs/images" from the MARP repository and place it in assets/images
+    - name: Pull images from MARP repo
+      run: |
+        rm -rf assets/images/outputs  # Remove the outputs directory if it exists
+        mkdir -p assets/images  # Create the directory if it doesn't exist
+        cd assets/images
+        git init
+        git remote add origin https://github.com/ajlab-gh/devops_content_creation_marp.git
+        git config core.sparseCheckout true
+        echo "outputs/images/*.png" >> .git/info/sparse-checkout  # Only target PNG files
+        git pull origin main
+        git sparse-checkout reapply  # Reapply sparse checkout to ensure files are updated
+        mv outputs/images/* .  # Move the images to the correct directory
+        rm -rf outputs  # Remove the outputs directory to avoid clutter
+
+    # Step 3: Pull only "audio" from the TTS repository and place it in assets/audio
+    - name: Pull audio from TTS repo
+      run: |
+        rm -rf assets/audio  # Remove the old audio directory if it exists
+        mkdir -p assets/audio  # Create the directory if it doesn't exist
+        cd assets/audio
+        git init
+        git remote add origin https://github.com/ajlab-gh/devops_content_creation_tts.git
+        git config core.sparseCheckout true
+        echo "audio/*.mp3" >> .git/info/sparse-checkout  # Only target MP3 files
+        git pull origin main
+        git sparse-checkout reapply  # Reapply sparse checkout to ensure files are updated
+        mv audio/* .  # Move audio files to the correct directory (assets/audio)
+        rm -rf audio  # Remove the nested "audio" directory
+
+    # Step 4: Debug: Check if the files are correctly fetched and merged
+    - name: List images and audio files
+      run: |
+        echo "Listing images:"
+        ls -la assets/images
+        echo "Listing audio:"
+        ls -la assets/audio
+
+    # Step 5: Set up Python
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    # Step 6: Install ffmpeg
+    - name: Install ffmpeg
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y ffmpeg
+
+    # Step 7: Run the video processing script
+    - name: Run video processing script
+      run: |
+        python scripts/create_video.py
+
+
+    # Optional: Push the newly created video back to the repository
+    - name: Configure Git
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+    - name: Commit PDF to the repository
+      run: |
+        git add .
+        git commit -m "Auto-generated video from new content"
+        git push
+      env:
+        GH_TOKEN: ${{ github.token }}
+
