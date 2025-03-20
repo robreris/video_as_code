@@ -1,0 +1,10 @@
+- image: 001.png
+  text: "FortiDevSec is a SAST tool which provides comprehensive static security scanning for your applications."
+- image: 002.png
+  text: "It simplifies security for modern development. Provides comprehensive vulnerability management and risk management."
+- image: 003.png
+  text: "FortiDevSec supports several current CI/CD technologies to fit seamlessly into your DevOps pipelines."
+- image: 004.png
+  text: "It supports SAST, S-C-A, Secrets, DAST, Container scanning, and IAC scanning."
+- image: 005.png
+  text: "Check out a live demo of the product at this address."
