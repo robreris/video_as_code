@@ -4,11 +4,11 @@ POC to turn still images and narration text into a final, narrated video using [
 
 ---
 
-Prereqs:
+## Prereqs:
 
 * Python 3.8+ and the following libraries:
 
-### Coqui
+### CoQui
 
 If using Coqui AI:
 
@@ -32,6 +32,8 @@ pip3 install piper-tts
 Then, download the .onnx and .onnx.json [files](https://github.com/rhasspy/piper/blob/master/VOICES.md) associated with the desired voice to the **voices** directory and run:
 
 ```bash
+mkdir voices
+
 echo 'Hello world!' | piper \
   --model voices/en_US-lessac-medium \
   --output_file hello_world.wav
@@ -90,7 +92,9 @@ print(tts.speakers)
 
 To test out different voices, there are samples located [here](https://rhasspy.github.io/piper-samples/)
 
-The associated .onnx and .onnx.json files associated with the voice you want to use can then be downloaded from [here](https://github.com/rhasspy/piper/blob/master/VOICES.md). You can specify alternate preferred download locations and voices in the script:
+The associated .onnx and .onnx.json files associated with the voice you want to use can then be downloaded from [here](https://github.com/rhasspy/piper/blob/master/VOICES.md). By default, the script will look for these files in the **voices** folder. 
+
+However, you can specify alternate preferred download locations and voice model files in the script:
 
 ```python
 ...
