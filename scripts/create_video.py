@@ -103,7 +103,15 @@ for entry in script_entries:
             print("Using Piper model...")
             print(f"🔊 Generating TTS via Piper for {image_filename}: {text}")
             result = subprocess.run(
-              [piper_bin, "--model", model_path, "--config", model_config_path, "--output_file", raw_path],
+              [
+                     piper_bin, 
+                     "--model", model_path, 
+                     "--config", model_config_path, 
+                     "--output_file", raw_path
+                     #"--length_scale", "1",        # speed of speech; higher=slower
+                     #"--noise_scale", "1.2",       # speech pattern variation; lower=flatter
+                     #"--noise_w", "0.3"            # duration/affects timing and rhythm 
+              ],            
               input=text.encode('utf-8'),
               stdout=subprocess.PIPE,
               stderr=subprocess.PIPE
