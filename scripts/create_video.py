@@ -7,7 +7,16 @@ from TTS.api import TTS
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-k', action='store_true')
+model_group = parser.add_mutually_exclusive_group(required=True)
+model_group.add_argument('--piper', help="Use Piper model.", action="store_true")
+model_group.add_argument('--coqui', help="Use Coqui model.", action="store_true")
 args = parser.parse_args()
+
+# === Piper configuration ===
+piper_bin = "piper"   #path to Piper binary
+model_path = "voices/en_GB-aru-medium.onnx"
+model_config_path = "voices/en_GB-aru-medium.onnx.json"
+output_wav = "final_output.wav"
 
 # === Path Configuration ===
 image_dir = "assets/images"
@@ -90,8 +99,19 @@ for entry in script_entries:
     if os.path.exists(final_path) and args.k == True:
         print(f"✅ Audio already exists for {image_filename}, skipping.")
     else:
-        print(f"🔊 Generating TTS for {image_filename}: {text}")
-        tts.tts_to_file(text=text, speaker="p225", file_path=raw_path)
+        if args.piper:
+            print("Using Piper model...")
+            print(f"🔊 Generating TTS via Piper for {image_filename}: {text}")
+            result = subprocess.run(
+              [piper_bin, "--model", model_path, "--config", model_config_path, "--output_file", raw_path],
+              input=text.encode('utf-8'),
+              stdout=subprocess.PIPE,
+              stderr=subprocess.PIPE
+            )
+        elif args.coqui:
+            print("Using Coqui model...")
+            print(f"🔊 Generating TTS via Coqui for {image_filename}: {text}")
+            tts.tts_to_file(text=text, speaker="p225", file_path=raw_path)
         convert_to_cbr(raw_path, final_path)
         os.remove(raw_path)  # Clean up raw file
 
