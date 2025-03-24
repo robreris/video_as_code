@@ -7,15 +7,22 @@ from TTS.api import TTS
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-k', action='store_true')
+parser.add_argument('--ls', type=str, help='Value for piper length_scale argument.', default='.85')
+parser.add_argument('--ns', type=str, help='Value for piper noise_scale argument.', default='.5')
+parser.add_argument('--nw', type=str, help='Value for piper length_scale argument.', default='.45')
+parser.add_argument('--piper-voice', type=str, help='Piper voice model. e.g. en_US-kusal-medium', default='en_US-kusal-medium')
 model_group = parser.add_mutually_exclusive_group(required=True)
 model_group.add_argument('--piper', help="Use Piper model.", action="store_true")
 model_group.add_argument('--coqui', help="Use Coqui model.", action="store_true")
 args = parser.parse_args()
 
+     
 # === Piper configuration ===
 piper_bin = "piper"   #path to Piper binary
-model_path = "voices/en_GB-aru-medium.onnx"
-model_config_path = "voices/en_GB-aru-medium.onnx.json"
+voice_folder = "voices"  #voice model file location
+
+model_path = voice_folder+"/"+args.piper_voice+".onnx"
+model_config_path = voice_folder+"/"+args.piper_voice+".onnx.json"
 output_wav = "final_output.wav"
 
 # === Path Configuration ===
@@ -107,10 +114,10 @@ for entry in script_entries:
                      piper_bin, 
                      "--model", model_path, 
                      "--config", model_config_path, 
-                     "--output_file", raw_path
-                     #"--length_scale", "1",        # speed of speech; higher=slower
-                     #"--noise_scale", "1.2",       # speech pattern variation; lower=flatter
-                     #"--noise_w", "0.3"            # duration/affects timing and rhythm 
+                     "--output_file", raw_path,
+                     "--length_scale", args.ls,        # speed of speech; higher=slower
+                     "--noise_scale", args.ns,       # speech pattern variation; lower=flatter
+                     "--noise_w", args.nw            # duration/affects timing and rhythm 
               ],            
               input=text.encode('utf-8'),
               stdout=subprocess.PIPE,
@@ -184,7 +191,7 @@ for idx, entry in enumerate(script_entries):
     print(f"🎥 Creating video: {output_video}")
     subprocess.run(ffmpeg_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-# Re-encode bumpers
+# Re-encode all generated video clips
 for filename in os.listdir(output_dir):
     if filename.endswith(".mp4"):
         input_path = os.path.join(output_dir, filename)

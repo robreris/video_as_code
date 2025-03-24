@@ -1,10 +1,12 @@
 - image: what-is-devsec.png
-  text: "FortiDevSec is a SAST tool which provides comprehensive static security scanning for your applications."
+  text: "FortiDevSec provides automated and continuous application security testing without requiring application security expertise."
 - image: comp-vuln-man.png
   text: "It simplifies security for modern development. Provides comprehensive vulnerability management and risk management."
 - image: cicd.png
   text: "FortiDevSec supports several current C eye C D technologies to fit seamlessly into your DevOps pipelines."
 - image: scan-types.png
   text: "It supports SAST. S-C-A. Secrets. DAST. Container scanning. And IAC scanning."
+- image: devsec-analytics.png
+  text: "It also provides various analytics visualizations to support a more efficient overview of your application security posture."
 - image: demo-link.png
   text: "Check out a live demo of the product at this link."
